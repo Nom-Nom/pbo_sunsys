@@ -2,39 +2,33 @@
 <b-container>
     <b-row class=test>
         <b-col>
-          <b-list-group>
-            <b-list-group-item>Sonnensystem:</b-list-group-item>
-            <b-list-group-item>Anzahl der Planeten</b-list-group-item>
-            <b-list-group-item>
-              Sonnensystem wechseln?
-              <b-button>zurück</b-button>
-              <b-button>vor</b-button>
-            </b-list-group-item>
+          <div>{{json.system.name}}</div>
         </b-col>
         <b-col>
-          <div class=planetgroup>
-            <div class=planet style="background-image:url();z-index=1;">
-              </div>
-              <div class=planet style="background-image:url();z-index=2;">
-              </div>
-              <div class=planet style="background-image:url();z-index=3;background-size:500px;background-position:100px 300px">
-              </div>
-              <div class=planetAtmos style="">
-              </div>
+        <div class=planetgroup>
+          <div class=planet style="background-image:url();z-index=1;">
+            </div>
+            <div class=planet style="background-image:url();z-index=2;">
+            </div>
+            <div class=planet style="background-image:url();z-index=3;background-size:500px;background-position:100px 300px">
+            </div>
+            <div class=planetAtmos style="">
+            </div>
             </div>
         </b-col>
-        <b-col>3 of 4</b-col>
-        <b-col>4 of 4</b-col>
+        <b-col>2/3</b-col>
     </b-row>
 </b-container>
 </template>
 235
 <script>
+import json from './process.json';
 export default {
   name: "app",
   data() {
     return {
-      msg: "Hi :>"
+      msg: "Hi :>",
+      json: json
     };
   }
 };
