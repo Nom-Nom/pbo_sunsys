@@ -7,27 +7,28 @@
   </header>
     <b-row class=test>
         <b-col>
-          <div>{{atmosphaereColor(1)}}</div>
+          <b-btn class=weiter v-on:click="id-=1">&lsaquo;</b-btn>
         </b-col>
         <b-col>
         <div class=planetgroup>
-          <b-button v-on:click="id+=1">Hi</b-button>
-          <div class=planet style="background-image:url();z-index=1;">
-            </div>
-            <div class=planet style="background-image:url();z-index=2;">
-            </div>
-            <div class=planet style="background-image:url();z-index=3;background-size:500px;background-position:100px 300px" v-bind:style="atomosphaereColor(id)">
-            </div>
-            <div class=planetAtmos style="">
-            </div>
-            </div>
+          <div class="planet gt" style="background-size:500px;background-position:100px 300px" >
+          </div>
+          <div class="planet wasser" style="background-position:0px 0px" v-bind:style="wasserZoom(id)">
+          </div>
+          <div class="planet verlauf">
+          </div>
+          <div class="planet atmos" v-bind:style="atmosphaereColor(id)">
+          </div>
+        </div>
         </b-col>
-        <b-col>2/3</b-col>
+        <b-col>
+          <b-btn class=weiter v-on:click="id+=1">&rsaquo;</b-btn>
+        </b-col>
     </b-row>
 </b-container-fluid>
 </template>
 <script>
-import json from './process.json';
+import json from "./process.json";
 export default {
   name: "app",
   data() {
@@ -38,85 +39,68 @@ export default {
     };
   },
   methods: {
-    wasserZoom: function (childnr) {
+    wasserZoom: function(childnr) {
       var anz;
       var proz;
-      anz=json.process.childs[childnr].participants.length;
+      anz = json.process.childs[childnr].participants.length;
       switch (anz) {
         case 1:
-              proz= "80 80";
-              break;
+          proz = "background-size:100% 100%;";
+          break;
         case 2:
-              proz="100 100";
-              break;
+          proz = "background-size:200% 200%;";
+          break;
         case 3:
-              proz="110 110";
-              break;
+          proz = "background-size:300% 300%;";
+          break;
         case 4:
-              proz="120 120";
-              break;
+          proz = "background-size:400% 400%;";
+          break;
       }
-    return proz;
+      return proz;
     },
-    
-    // Nui hat quatsch gemacht 
-    atomosphaereColor: function(value) {
-      if (value == 1) {
-        return "background-color:rgba(255," + 255 + ",0, 0.2)";
-      }
-      if (value == 2) {
-        return "background-color:rgba(255," + 0 + ",0, 0.2)";
-      }
-      if (value == 3) {
-        return "background-color:rgba(255," + 60 + ",0, 0.2)";
-      }
-      if (value == 4) {
-        return "background-color:rgba(255," + 170 + ",0, 0.2)";
-      }
-    },
-    // Bis hier hin :>
-
-    atmosphaereColor: function(childnr){
+    atmosphaereColor: function(childnr) {
       var sh;
-      var chnr=childnr;
+      var chnr = childnr;
       var rgba;
-      sh=json.process.childs[childnr].initiator.match(/\d+/g);
-      chnr= chnr % 3;
-      sh=sh % 3;
-      switch (chnr){
+      var trans = 0.15;
+      sh = json.process.childs[childnr].initiator.match(/\d+/g);
+      chnr = chnr % 3;
+      sh = sh % 3;
+      switch (chnr) {
         case 0:
-          rgba="rgba(255,0,0,0.3)";
+          rgba = "background-color:rgba(255,0,0,"+trans+");";
           break;
         case 1:
-          rgba="rgba(255,255,0,0.3)";
+          rgba = "background-color:rgba(255,255,0,"+trans+");";
           break;
         case 2:
-          rgba="rgba(255,255,255,0.3)";
+          rgba = "background-color:rgba(255,255,255,"+trans+");";
           break;
       }
-      if(chnr == 1){
-        switch (sh){
+      if (chnr == 1) {
+        switch (sh) {
           case 0:
-            rgba="rgba(0,0,255,0.3)";
-            break;           
+            rgba = "background-color:rgba(0,0,255,"+trans+");";
+            break;
           case 1:
-            rgba="rgba(255,0,0,0.3)";
+            rgba = "background-color:rgba(255,0,0,"+trans+");";
             break;
           case 2:
-            rgba="rgba(0,255,0,0.3)";
+            rgba = "background-color:rgba(0,255,0,"+trans+");";
             break;
         }
       }
-      if(chnr == 2){
-        switch (sh){
+      if (chnr == 2) {
+        switch (sh) {
           case 0:
-            rgba="rgba(255,0,255,0.3)";
-            break;           
+            rgba = "background-color:rgba(255,0,255,"+trans+");";
+            break;
           case 1:
-            rgba="rgba(255,255,0,0.3)";
+            rgba = "background-color:rgba(255,255,0,"+trans+");";
             break;
           case 2:
-            rgba="rgba(0,255,255,0.3)";
+            rgba = "background-color:rgba(0,255,255,"+trans+");";
             break;
         }
       }
@@ -152,20 +136,34 @@ export default {
   height: 150px;
   background-size: 150px;
 }
-.planetAtmos {
-  border-radius: 50%;
-  position: absolute;
+.atmos {
   top: 0px;
   left: 0px;
   width: 160px;
   height: 160px;
-  filter: blur(3px);
   mix-blend-mode: multiply;
-  background-color: rgba(255, 0, 0, 0.2);
+  z-index: 4;
 }
-header{
+.verlauf{
+  mix-blend-mode: overlay;
   background: radial-gradient(
-  circle farthest-side at 50% 0px,
+  circle farthest-side at 0px 0px,
+  rgba(255, 255, 255, 0) 0%,
+  rgba(0, 0, 0, 0.8)100%
+  );
+  z-index: 3;
+}
+.gt{
+  background-image:url();
+  z-index:1;
+}
+.wasser {
+  background-image: url(/src/assets/wasserTextur.svg);
+  z-index: 2;
+}
+header {
+  background: radial-gradient(
+    circle farthest-side at 50% 0px,
     #330d48 0%,
     #061840 64%,
     #05143a 100%
@@ -173,20 +171,20 @@ header{
   height: 100vh;
   text-align: center;
 }
-.openerPlanets{
+.openerPlanets {
   position: absolute;
-  display:block;
+  display: block;
   margin-left: auto;
   margin-right: auto;
   left: 40px;
   right: 0;
-  padding-top:15vh;
+  padding-top: 15vh;
   max-width: 760px;
   z-index: 1;
 }
-.openerSchrift{
+.openerSchrift {
   position: absolute;
-  display:block;
+  display: block;
   margin-left: auto;
   margin-right: auto;
   left: 0;
@@ -194,16 +192,16 @@ header{
   max-width: 760px;
   z-index: 2;
 }
-.container-fluid{
+.container-fluid {
   padding-left: 0px !important;
   padding-right: 0px !important;
   margin-left: 0px !important;
   margin-right: 0px !important;
 }
-.author{
+.author {
   top: 95vh;
   position: absolute;
-  display:block;
+  display: block;
   z-index: 3;
   margin-left: auto;
   margin-right: auto;
@@ -211,7 +209,10 @@ header{
   right: 0;
   color: #3462ac;
 }
-body{
+.weiter{
+  transform: translateY(-50%);
+}
+body {
   overflow-x: hidden;
 }
 </style>
