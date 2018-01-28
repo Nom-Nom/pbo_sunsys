@@ -2,7 +2,7 @@
 <b-container>
     <b-row class=test>
         <b-col>
-          <div>{{json.system.name}}</div>
+          <div>{{atmosphaereColor(1)}}</div>
         </b-col>
         <b-col>
         <div class=planetgroup>
@@ -30,6 +30,75 @@ export default {
       msg: "Hi :>",
       json: json
     };
+  },
+  methods: {
+    wasserZoom: function (childnr) {
+      var anz;
+      var proz;
+      anz=json.process.childs[childnr].participants.length;
+      switch (anz) {
+        case 1:
+              proz= "80 80";
+              break;
+        case 2:
+              proz="100 100";
+              break;
+        case 3:
+              proz="110 110";
+              break;
+        case 4:
+              proz="120 120";
+              break;
+      }
+    return proz;
+    },
+    atmosphaereColor: function(childnr){
+      var sh;
+      var chnr=childnr;
+      var rgba;
+      sh=json.process.childs[childnr].initiator.match(/\d+/g);
+      chnr= chnr % 3;
+      sh=sh % 3;
+      switch (chnr){
+        case 0:
+          rgba="rgba(255,0,0,0.3)";
+          break;
+        case 1:
+          rgba="rgba(255,255,0,0.3)";
+          break;
+        case 2:
+          rgba="rgba(255,255,255,0.3)";
+          break;
+      }
+      if(chnr == 1){
+        switch (sh){
+          case 0:
+            rgba="rgba(0,0,255,0.3)";
+            break;           
+          case 1:
+            rgba="rgba(255,0,0,0.3)";
+            break;
+          case 2:
+            rgba="rgba(0,255,0,0.3)";
+            break;
+        }
+      }
+      if(chnr == 2){
+        switch (sh){
+          case 0:
+            rgba="rgba(255,0,255,0.3)";
+            break;           
+          case 1:
+            rgba="rgba(255,255,0,0.3)";
+            break;
+          case 2:
+            rgba="rgba(0,255,255,0.3)";
+            break;
+        }
+      }
+      console.log(rgba);
+      return rgba;
+    }
   }
 };
 </script>
