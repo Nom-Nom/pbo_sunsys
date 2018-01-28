@@ -1,5 +1,5 @@
 <template>
-<b-container-fluid>
+<b-container fluid>
   <header>
     <img class="openerPlanets" src="./assets/openerPlanets.png">
     <img class="openerSchrift" src="./assets/openerSchrift.png">
@@ -11,7 +11,9 @@
         </b-col>
         <b-col>
         <div class=planetgroup>
-          <div class="planet gt" style="background-size:500px;background-position:100px 300px" >
+          <div class="planet gt" style="background-size:2500%;background-position:50% 50%" >
+          </div>
+          <div class="planet gtFarbe" style="background-color:rgb(255,0,0);mix-blend-mode:overlay;">
           </div>
           <div class="planet wasser" style="background-position:0px 0px" v-bind:style="wasserZoom(id)">
           </div>
@@ -25,7 +27,7 @@
           <b-btn class=weiter v-on:click="id+=1">&rsaquo;</b-btn>
         </b-col>
     </b-row>
-</b-container-fluid>
+</b-container>
 </template>
 <script>
 import json from "./process.json";
@@ -145,16 +147,19 @@ export default {
   z-index: 4;
 }
 .verlauf{
-  mix-blend-mode: overlay;
+  mix-blend-mode: multiply;
   background: radial-gradient(
   circle farthest-side at 0px 0px,
   rgba(255, 255, 255, 0) 0%,
-  rgba(0, 0, 0, 0.8)100%
+  rgba(61, 61, 61, 1)100%
   );
   z-index: 3;
 }
 .gt{
-  background-image:url();
+  background-image:url(/src/assets/grundTextur.svg);
+  z-index:1;
+}
+.gtFarbe{
   z-index:1;
 }
 .wasser {
@@ -189,6 +194,7 @@ header {
   margin-right: auto;
   left: 0;
   right: 0;
+  max-height: 100vh;
   max-width: 760px;
   z-index: 2;
 }
