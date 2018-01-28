@@ -108,6 +108,15 @@ export default {
       }
       console.log(rgba);
       return rgba;
+    },
+    wasserPosition: function (childnr) {
+      var count=0;
+      var str=json.process.childs[childnr].description;
+      for(var i=0; i<str.length; i++){
+        count+=str[i];
+        console.log(count);
+      }
+      console.log(str);
     }
   }
 };
