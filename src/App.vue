@@ -10,12 +10,12 @@
           <b-btn class="weiter zurueck" v-on:click="id-=1">&lsaquo;</b-btn>
         </b-col>
         <b-col>
-        <div class=planetgroup> {{grundTexturPosition(1)}}
-          <div class="planet gt" style="background-size:2500%;background-position:50% 50%" >
+        <div class=planetgroup>
+          <div class="planet gt" style="background-size:500%;" v-bind:style="grundTexturPosition(id)" >
           </div>
-          <div class="planet gtFarbe" style="background-color:rgb(255,0,0);mix-blend-mode:overlay;">
+          <div class="planet gtFarbe" style="mix-blend-mode:overlay;" v-bind:style="gtFarbe(id)">
           </div>
-          <div class="planet wasser" style="background-position:0px 0px" v-bind:style="wasserZoom(id)">
+          <div class="planet wasser" v-bind:style="wasserZoom(id)+''+wasserPosition(id)">
           </div>
           <div class="planet verlauf">
           </div>
@@ -47,16 +47,16 @@ export default {
       anz = json.process.childs[childnr].participants.length;
       switch (anz) {
         case 1:
-          proz = "background-size:100% 100%;";
-          break;
-        case 2:
           proz = "background-size:200% 200%;";
           break;
-        case 3:
+        case 2:
           proz = "background-size:300% 300%;";
           break;
-        case 4:
+        case 3:
           proz = "background-size:400% 400%;";
+          break;
+        case 4:
+          proz = "background-size:500% 500%;";
           break;
       }
       return proz;
@@ -107,7 +107,6 @@ export default {
             break;
         }
       }
-      console.log(rgba);
       return rgba;
     },
     wasserPosition: function (childnr) {
@@ -120,12 +119,11 @@ export default {
         //console.log(count);
       }
       proz1=count % 100;
-      console.log(proz1);
+      //console.log(proz1);
       proz2=(proz1 % 51) * 2;
-      console.log(proz2);
+      //console.log(proz2);
       wasserpos="background-position: " + proz1 + "% " + proz2 + "%;";
 
-      console.log(wasserpos);
       return wasserpos;
     },
     grundTexturPosition: function (childnr) {
@@ -143,8 +141,34 @@ export default {
       //console.log(proz2);
       texturpos="background-position: " + proz1 + "% " + proz2 + "%;";
 
-      console.log(texturpos);
       return texturpos;
+    },
+     gtFarbe: function (childnr) {
+      var count1=1;
+      var count2=1;
+      var count3=1;
+      var rgb;
+      var proz1=0; var proz2=0;
+      var gtFarbe;
+      var split=json.process.childs[childnr].name.length/3;
+      split=parseInt(split);
+      var str1=json.process.childs[childnr].name.substr(0,split-1);
+      var str2=json.process.childs[childnr].name.substr(split-1,split*2-1);
+      var str3=json.process.childs[childnr].name.substr((split*2)-1,json.process.childs[childnr].name.length);
+      for(var i=0; i< str1.length; i++){
+        if (str1.charCodeAt(i)!=0) count1+=str1.charCodeAt(i);
+      }
+      for(var i=0; i< str2.length; i++){
+        if (str2.charCodeAt(i)!=0)count2+=str2.charCodeAt(i);
+      }
+      for(var i=0; i< str3.length; i++){
+        if (str3.charCodeAt(i)!=0)count3+=str3.charCodeAt(i);
+      }
+      count1=count1 % 256;
+      count2=count2 % 256;
+      count3=count3 % 256;
+      rgb="background-color:rgb(" + count1 + "," + count2 + "," + count3 + ");";
+      return rgb;
     }
   }
 };
