@@ -5,9 +5,9 @@
     <img class="openerSchrift" src="./assets/openerSchrift.png">
     <span class="author">von Hannes Liehr und Anna Krauß</span>
   </header>
-    <b-row class=test>
-        <b-col>
-          <b-btn class=weiter v-on:click="id-=1">&lsaquo;</b-btn>
+    <b-row>
+        <b-col align-self="center" >
+          <b-btn class="weiter zurueck" v-on:click="id-=1">&lsaquo;</b-btn>
         </b-col>
         <b-col>
         <div class=planetgroup>
@@ -23,7 +23,7 @@
           </div>
         </div>
         </b-col>
-        <b-col>
+        <b-col align-self="center" >
           <b-btn class=weiter v-on:click="id+=1">&rsaquo;</b-btn>
         </b-col>
     </b-row>
@@ -65,16 +65,17 @@ export default {
       var sh;
       var chnr = childnr;
       var rgba;
-      var trans = 0.15;
+      var trans = 0.1;
+      var light = 150;
       sh = json.process.childs[childnr].initiator.match(/\d+/g);
       chnr = chnr % 3;
       sh = sh % 3;
       switch (chnr) {
         case 0:
-          rgba = "background-color:rgba(255,0,0,"+trans+");";
+          rgba = "background-color:rgba(255,"+light+","+light+","+trans+");";
           break;
         case 1:
-          rgba = "background-color:rgba(255,255,0,"+trans+");";
+          rgba = "background-color:rgba(255,255,"+light+","+trans+");";
           break;
         case 2:
           rgba = "background-color:rgba(255,255,255,"+trans+");";
@@ -83,26 +84,26 @@ export default {
       if (chnr == 1) {
         switch (sh) {
           case 0:
-            rgba = "background-color:rgba(0,0,255,"+trans+");";
+            rgba = "background-color:rgba("+light+","+light+",255,"+trans+");";
             break;
           case 1:
-            rgba = "background-color:rgba(255,0,0,"+trans+");";
+            rgba = "background-color:rgba(255,"+light+","+light+","+trans+");";
             break;
           case 2:
-            rgba = "background-color:rgba(0,255,0,"+trans+");";
+            rgba = "background-color:rgba("+light+",255,"+light+","+trans+");";
             break;
         }
       }
       if (chnr == 2) {
         switch (sh) {
           case 0:
-            rgba = "background-color:rgba(255,0,255,"+trans+");";
+            rgba = "background-color:rgba(255,"+light+",255,"+trans+");";
             break;
           case 1:
-            rgba = "background-color:rgba(255,255,0,"+trans+");";
+            rgba = "background-color:rgba(255,255,"+light+","+trans+");";
             break;
           case 2:
-            rgba = "background-color:rgba(0,255,255,"+trans+");";
+            rgba = "background-color:rgba("+light+",255,255,"+trans+");";
             break;
         }
       }
@@ -132,17 +133,18 @@ export default {
   margin-top: 60px;
 }
 .planetgroup {
+  top:50%;
   position: relative;
-  top: 75px;
-  left: 75px;
-  width: 150px;
-  height: 150px;
+  margin:auto;
+  width: 170px;
+  height: 170px;
+  transform:translateY(-50%)
 }
 .planet {
   border-radius: 50%;
   position: absolute;
-  top: 5px;
-  left: 5px;
+  top: 10px;
+  left: 10px;
   width: 150px;
   height: 150px;
   background-size: 150px;
@@ -150,9 +152,9 @@ export default {
 .atmos {
   top: 0px;
   left: 0px;
-  width: 160px;
-  height: 160px;
-  mix-blend-mode: multiply;
+  width: 170px;
+  height: 170px;
+  mix-blend-mode: screen;
   z-index: 4;
 }
 .verlauf{
@@ -194,6 +196,7 @@ header {
   right: 0;
   padding-top: 15vh;
   max-width: 760px;
+  max-height:100vh;
   z-index: 1;
 }
 .openerSchrift {
@@ -225,9 +228,14 @@ header {
   color: #3462ac;
 }
 .weiter{
-  transform: translateY(-50%);
+
+}
+.zurueck{
+  margin-left:100%;
+  transform:translateX(-100%);
 }
 body {
   overflow-x: hidden;
+  background-color: #05143a;
 }
 </style>
