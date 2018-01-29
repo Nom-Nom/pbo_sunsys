@@ -10,7 +10,7 @@
           <b-btn class="weiter zurueck" v-on:click="id-=1">&lsaquo;</b-btn>
         </b-col>
         <b-col>
-        <div class=planetgroup>
+        <div class=planetgroup> {{grundTexturPosition(1)}}
           <div class="planet gt" style="background-size:2500%;background-position:50% 50%" >
           </div>
           <div class="planet gtFarbe" style="background-color:rgb(255,0,0);mix-blend-mode:overlay;">
@@ -112,12 +112,39 @@ export default {
     },
     wasserPosition: function (childnr) {
       var count=0;
+      var proz1=0; var proz2=0;
+      var wasserpos;
       var str=json.process.childs[childnr].description;
       for(var i=0; i<str.length; i++){
-        count+=str[i];
-        console.log(count);
+        count+=str.charCodeAt(i);
+        //console.log(count);
       }
-      console.log(str);
+      proz1=count % 100;
+      console.log(proz1);
+      proz2=(proz1 % 51) * 2;
+      console.log(proz2);
+      wasserpos="background-position: " + proz1 + "% " + proz2 + "%;";
+
+      console.log(wasserpos);
+      return wasserpos;
+    },
+    grundTexturPosition: function (childnr) {
+      var count=0;
+      var proz1=0; var proz2=0;
+      var texturpos;
+      var str=json.process.childs[childnr].id;
+      for(var i=0; i<str.length; i++){
+        count+=str.charCodeAt(i);
+        //console.log(count);
+      }
+      proz1=count % 100;
+      console.log(proz1);
+      proz2=(proz1 % 51) * 2;
+      console.log(proz2);
+      texturpos="background-position: " + proz1 + "% " + proz2 + "%;";
+
+      console.log(texturpos);
+      return texturpos;
     }
   }
 };
