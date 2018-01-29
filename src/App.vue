@@ -132,15 +132,15 @@ export default {
       var count=0;
       var proz1=0; var proz2=0;
       var texturpos;
-      var str=json.process.childs[childnr].id;
-      for(var i=0; i<str.length; i++){
+      var str=json.process.childs[childnr].start;
+      for(var i=0; i<str.length;i++){
         count+=str.charCodeAt(i);
         //console.log(count);
       }
       proz1=count % 100;
-      console.log(proz1);
+      //console.log(proz1);
       proz2=(proz1 % 51) * 2;
-      console.log(proz2);
+      //console.log(proz2);
       texturpos="background-position: " + proz1 + "% " + proz2 + "%;";
 
       console.log(texturpos);
