@@ -39,7 +39,8 @@ export default {
     return {
       msg: "Hi :>",
       json: json,
-      id: 1
+      id: 1,
+      initiator: 1
     };
   },
   methods: {
@@ -63,7 +64,7 @@ export default {
       }
       return proz;
     },
-    atmosphaereColor: function(childnr/*, hg*/) {
+    atmosphaereColor: function(childnr /*, hg*/) {
       var sh;
       var chnr = childnr;
       var rgba;
@@ -145,7 +146,7 @@ export default {
       //   rgba=rgba.split(",", 3);
       //   console.log(rgba+"Hallo")
       // }
-       return rgba;
+      return rgba;
     },
     wasserPosition: function(childnr) {
       var count = 0;
@@ -217,6 +218,31 @@ export default {
       rgb =
         "background-color:rgb(" + count1 + "," + count2 + "," + count3 + ");";
       return rgb;
+    },
+    sonnensysName: function(initiatornr) {
+      var name;
+      var sth = json.process.stakeholder[initiatornr].name;
+      name = sth[0] + "-";
+
+      if (sth.length == 4) {
+        name += sth[2] + sth[3];
+      } else if (sth.length <= 7) {
+        for (var i = 1; i < sth.length; i++) {
+          if (i == 3 || i == 5 || i == sth.length - 1) {
+            if (sth[i] == "(" || sth[i] == ")") name += "-";
+            else name += sth[i];
+          }
+        }
+      } else if (sth.length > 7) {
+        for (var i = 1; i < sth.length; i++) {
+          if (i == 3 || i == 5 || i == 7 || i == sth.length - 1) {
+            if (sth[i] == "(" || sth[i] == ")") name += "-";
+            else name += sth[i];
+          }
+        }
+      }
+      name += initiatornr;
+      //console.log(name);
     }
   }
 };
