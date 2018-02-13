@@ -5,7 +5,26 @@
     <img class="openerSchrift" src="./assets/openerSchrift.png">
     <span class="author">von Hannes Liehr und Anna Krauß</span>
   </header>
-    <b-row>
+    <b-row class="site">
+       <b-col cols="1" align-self="center" >
+          <b-btn class="weiter zurueck" v-on:click="initiator-=1">&lsaquo;</b-btn>
+        </b-col>
+        <b-col>
+          <div class="sonne">
+            <img src="/src/assets/sonne.png">
+          </div>
+          <div class="umlaufBahn" v-for="(item,index) in sunSys" v-bind:style="ulb(index,100,300, 20)">
+            {{item.planetId}}
+          </div>
+          <div class="testPlanet" v-for="(item,index) in sunSys" v-bind:style="lbTrafo(index, 100,300,20)">
+            {{item.planetId}}
+          </div>
+        </b-col>
+        <b-col cols="1" align-self="center" >
+          <b-btn class=weiter v-on:click="initiator+=1">&rsaquo;</b-btn>
+        </b-col>
+    </b-row>
+    <b-row class="site">
         <b-col align-self="center" >
           <b-btn class="weiter zurueck" v-on:click="id-=1">&lsaquo;</b-btn>
         </b-col>
@@ -19,9 +38,9 @@
           </div>
           <div class="planet wasser" v-bind:style="wasserZoom(id)+''+wasserPosition(id)">
           </div>
-          <div class="planet verlauf" v-bind:style="atmosphaereColor(id/*,true*/)">
+          <div class="planet verlauf" v-bind:style="atmosphaereColor(id,true)">
           </div>
-          <div class="planet atmos" v-bind:style="atmosphaereColor(id/*,false*/)">
+          <div class="planet atmos" v-bind:style="atmosphaereColor(id,false)">
           </div>
         </div>
         </b-col>
@@ -40,13 +59,49 @@ export default {
       msg: "Hi :>",
       json: json,
       id: 1,
-      initiator: 1
+      initiator: 1,
+      planet:{
+        gtPos:{x:0,y:0},
+        gtFarbe:{r:0,g:0,b:0},
+        wPos:{x:0,y:0},
+        atmoFarbe:{r:0,g:0,b:0,a:0},
+        csStyle:''
+      }, 
+      sunSys:[
+        {planetId:1},
+        {planetId:2},
+        {planetId:3},
+        {planetId:4},
+        {planetId:5},
+        {planetId:6},
+        {planetId:7},
+        {planetId:8}
+      ]
     };
   },
+  watch:{
+    planet: function(){
+      console.log("hi")
+    }
+  },
   methods: {
+    ulb:function(iterator, diffBH, breite, abstand){
+      var h=(breite-diffBH)*2+iterator*abstand; 
+      var b=breite*2+iterator*abstand*3;
+      console.log("height:" + h + "px; width:" + b + "px; border-radius:" + b + "px/" + h + "px;");
+      return "height:" + h + "px; width:" + b + "px; border-radius:" + b + "px/" + h + "px; transform: translateX(-50%) translateY(-50%);";
+    },
+    lbTrafo: function(iterator, diffBH, breite, abstand){
+      breite+=iterator*abstand;
+      //diffBH+=iterator*abstand;
+      var grad=((360/this.sunSys.length)*(iterator)).toFixed(0);
+      var sin=breite-(diffBH*(Math.abs(Math.sin(grad* Math.PI / 180.0).toFixed(3)))).toFixed(0);
+      return "transform:translateX(-50%) translateY(-50%) rotate(" + grad + "deg) translate(" + sin + "px) rotate(-" + grad + "deg);";
+    },
     wasserZoom: function(childnr) {
       var anz;
       var proz;
+      console.log(childnr);
       anz = json.process.childs[childnr].participants.length;
       switch (anz) {
         case 1:
@@ -61,12 +116,17 @@ export default {
         case 4:
           proz = "background-size:500% 500%;";
           break;
+        default:
+          proz= "background-size:250% 250%;";
+          break;
       }
+      console.log(proz);
       return proz;
     },
-    atmosphaereColor: function(childnr /*, hg*/) {
+    atmosphaereColor: function(childnr, hg) {
       var sh;
       var chnr = childnr;
+      var r,g,b=0;
       var rgba;
       var trans = 0.1;
       var light = 150;
@@ -74,79 +134,52 @@ export default {
       chnr = chnr % 3;
       sh = sh % 3;
       switch (chnr) {
-        case 0:
-          rgba =
-            "background-color:rgba(255," +
-            light +
-            "," +
-            light +
-            "," +
-            trans +
-            ");";
-          break;
-        case 1:
-          rgba = "background-color:rgba(255,255," + light + "," + trans + ");";
-          break;
-        case 2:
-          rgba = "background-color:rgba(255,255,255," + trans + ");";
-          break;
+        case 0:   r=255;  g=light;  b=light;  break;
+        case 1:   r=255;  g=255;    b=light;  break;
+        case 2:   r=255;  g=255;    b=255;    break;
       }
       if (chnr == 1) {
         switch (sh) {
-          case 0:
-            rgba =
-              "background-color:rgba(" +
-              light +
-              "," +
-              light +
-              ",255," +
-              trans +
-              ");";
-            break;
-          case 1:
-            rgba =
-              "background-color:rgba(255," +
-              light +
-              "," +
-              light +
-              "," +
-              trans +
-              ");";
-            break;
-          case 2:
-            rgba =
-              "background-color:rgba(" +
-              light +
-              ",255," +
-              light +
-              "," +
-              trans +
-              ");";
-            break;
+          case 0:   r=light;  g=light;  b=255;    break;
+          case 1:   r=255;    g=light;  b=light;  break;
+          case 2:   r=light;  g=255;    b=light;  break;
         }
       }
       if (chnr == 2) {
         switch (sh) {
-          case 0:
-            rgba =
-              "background-color:rgba(255," + light + ",255," + trans + ");";
-            break;
-          case 1:
-            rgba =
-              "background-color:rgba(255,255," + light + "," + trans + ");";
-            break;
-          case 2:
-            rgba =
-              "background-color:rgba(" + light + ",255,255," + trans + ");";
-            break;
+          case 0:   r=255;    g=light;  b=255;    break;
+          case 1:   r=255;    g=255;    b=light;  break;
+          case 2:   r=light;  g=255;    b=255;    break;
         }
       }
-      // if (hg==true){
-      //   rgba=rgba.match(/([\d{}+]*,){3}/g)
-      //   rgba=rgba.split(",", 3);
-      //   console.log(rgba+"Hallo")
-      // }
-      return rgba;
+      if (hg==true){
+        r-=light;
+        g-=light;
+        b-=light;
+        rgba =   "background: radial-gradient( circle farthest-side at 0px 0px, rgba(0, 0, 0, 0) 0%, rgba("+r+", "+g+", "+b+", 1)90%);";
+        return rgba;
+      } else {
+        rgba ="background-color:rgba("+r+","+g+","+b+","+trans+");";
+        return rgba;
+      }
+    },
+    sonnensys: function(initiatornr){
+      var nr, str, strl;
+      var ini=initiatornr+1;
+      var sonnsys=[];
+
+      for(var i=0; i<json.process.childs.length;i++){
+        str=json.process.childs[i].initiator;
+        strl=str.length;
+        nr=str.substr(strl-2,strl);
+        nr=nr.match(/\d+/g);
+        nr=parseInt(nr);
+        if(ini==nr){
+          console.log("ju");
+          this.sunSys.push({planetid:nr});
+        }
+        //console.log("IID: "+ ini + "child: " +nr);
+      }
     },
     wasserPosition: function(childnr) {
       var count = 0;
@@ -163,7 +196,7 @@ export default {
       proz2 = (proz1 % 51) * 2;
       //console.log(proz2);
       wasserpos = "background-position: " + proz1 + "% " + proz2 + "%;";
-
+      //console.log(wasserpos);
       return wasserpos;
     },
     grundTexturPosition: function(childnr) {
@@ -257,6 +290,33 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.testPlanet{
+    position: absolute;
+    border-radius: 50%;
+    background-color: chartreuse;
+    width:50px;
+    height: 50px;
+    text-align:center;
+    left:50%;
+    top:50%;
+}
+.umlaufBahn{
+  border-style: dashed;
+  border-width: 2px;
+  border-color: yellow;
+  position: absolute;
+  left:50%;
+  top:50%;
+  z-index: 10;
+}
+.sonne{
+  top: 50%;
+  transform: translateY(-50%);
+  position: relative;
+  margin: auto;
+  display: box;
+  text-align:center;
+}
 .planetgroup {
   margin-top: 10% !important;
   top: 50%;
@@ -296,13 +356,13 @@ export default {
   z-index: 1 !important;
 }
 .verlauf {
-  mix-blend-mode: normal;
+  mix-blend-mode: difference;
   background: radial-gradient(
     circle farthest-side at 0px 0px,
     rgba(0, 0, 0, 0) 0%,
-    rgba(20, 0, 0, 1)100%
+    rgba(0, 0, 0, 1)100%
   );
-  z-index: 3;
+  z-index: 2;
 }
 .gt {
   background-image: url(/src/assets/grundTextur.svg);
@@ -365,8 +425,7 @@ header {
   right: 0;
   color: #3462ac;
 }
-.weiter {
-}
+
 .zurueck {
   margin-left: 100%;
   transform: translateX(-100%);
@@ -374,5 +433,8 @@ header {
 body {
   overflow-x: hidden;
   background-color: rgb(12, 11, 16);
+}
+.site{
+  height: 100vh;
 }
 </style>
