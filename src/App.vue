@@ -42,6 +42,7 @@
           </div>
           <div class="planet atmos" v-bind:style="atmosphaereColor(id,false)">
           </div>
+          <div class="planet ring" v-bind:style="ring(id)"> </div>
         </div>
         </b-col>
         <b-col align-self="center" >
@@ -58,7 +59,7 @@ export default {
     return {
       msg: "Hi :>",
       json: json,
-      id: 1,
+      id: 0,
       initiator: 1,
       planet:{
         gtPos:{x:0,y:0},
@@ -276,6 +277,13 @@ export default {
       }
       name += initiatornr;
       //console.log(name);
+    },
+    ring: function(planetid){
+      var type= json.process.childs[planetid].transformation.type;
+      if(json.process.childs[planetid].transformation.decision == "true" && type == ">"){
+        console.log("ring");
+        return "visibility: visible";
+      } 
     }
   }
 };
@@ -342,6 +350,15 @@ export default {
   height: 110%;
   mix-blend-mode: multiply;
   z-index: 4;
+}
+.ring{
+  top: -25%;
+  left: -25%;
+  width: 150%;
+  height: 150%;
+  background-color: brown;
+  z-index: 4;
+  visibility: hidden;
 }
 .hgAtmos {
   background: radial-gradient(
