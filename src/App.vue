@@ -7,11 +7,11 @@
   </header>
     <b-row class="site">
        <b-col cols="1" align-self="center" >
-          <b-btn class="weiter zurueck" v-on:click="initiator-=1, sonnensys(initiator);">&lsaquo;</b-btn>
+          <b-btn class="weiter zurueck" v-on:click="((initiator==0)? initiator=0 : initiator-=1), sonnensys(initiator);">&lsaquo;</b-btn>
         </b-col>
         <b-col>
-          <div class="sonne">
-            <img src="/src/assets/sonne.png">
+          <div class="sonne text-center my-3">
+            <img src="/src/assets/sonne.png" v-b-tooltip.hover title="I'm a tooltip!">
           </div>
           <div class="umlaufBahn" v-for="(item,index) in sunSys" v-bind:style="ulb(index,100,200,60,30)">
           </div>
@@ -36,12 +36,12 @@
           </div>
         </b-col>
         <b-col cols="1" align-self="center" >
-          <b-btn class=weiter v-on:click="initiator+=1 , sonnensys(initiator)">&rsaquo;</b-btn>
+          <b-btn class=weiter v-on:click="((initiator>=15) ? initiator=15 : initiator+=1), sonnensys(initiator)">&rsaquo;</b-btn>
         </b-col>
     </b-row>
     <b-row class="site">
         <b-col align-self="center" >
-          <b-btn class="weiter zurueck" v-on:click="id-=1">&lsaquo;</b-btn>
+           <b-btn class="weiter zurueck" v-on:click="((id==0) ? id=0 : id-=1)">&lsaquo;</b-btn>
         </b-col>
         <b-col>
         <div class=planetgroup>
@@ -61,7 +61,7 @@
         </div>
         </b-col>
         <b-col align-self="center" >
-          <b-btn class=weiter v-on:click="id+=1">&rsaquo;</b-btn>
+          <b-btn class=weiter v-on:click="((id>=43) ? id=43 : id+=1)">&rsaquo;</b-btn>
         </b-col>
     </b-row>
 </b-container>
@@ -118,20 +118,8 @@ export default {
       var grad=((360/this.sunSys.length)*(iterator));
       var r=(breite-diffBH*(Math.abs(Math.sin(grad* Math.PI / 180.0))));
       
-      var scale=1;
-      /*
-      var standardScale=0.5;
-      var scaleFactor=0.5;
-      if(grad<=90){
-        scale=(grad/90)*scaleFactor+standardScale;
-      } if(grad>90){
-        scale=(1-(grad-90)/90)*scaleFactor;
-      } if (grad >180){
-        scale=(((grad-180)/90))*scaleFactor;
-      } if (grad >270){
-        scale=(1-(grad-270)/90)+scaleFactor;
-      }  */
-
+      var scale=(Math.sin(grad* Math.PI / 180.0)+2)/2;
+      
       console.log("Planet("+iterator+") scale: "+scale);
       return "transform:translateX(-50%) translateY(-50%) rotate(" + grad + "deg) translate(" + r + "px) rotate(-" + grad + "deg) scale("+scale+");";
     },
@@ -360,6 +348,7 @@ export default {
   margin: auto;
   display: box;
   text-align:center;
+  z-index: 11;
 }
 .planetgroup {
   margin-top: 10% !important;
@@ -392,7 +381,6 @@ export default {
   left: -25%;
   width: 150%;
   height: 150%;
-  background-color: brown;
   z-index: 4;
   visibility: hidden;
 }
