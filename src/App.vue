@@ -7,21 +7,36 @@
   </header>
     <b-row class="site">
        <b-col cols="1" align-self="center" >
-          <b-btn class="weiter zurueck" v-on:click="initiator-=1">&lsaquo;</b-btn>
+          <b-btn class="weiter zurueck" v-on:click="initiator-=1, sonnensys(initiator);">&lsaquo;</b-btn>
         </b-col>
         <b-col>
           <div class="sonne">
             <img src="/src/assets/sonne.png">
           </div>
-          <div class="umlaufBahn" v-for="(item,index) in sunSys" v-bind:style="ulb(index,100,300, 20)">
-            {{item.planetId}}
+          <div class="umlaufBahn" v-for="(item,index) in sunSys" v-bind:style="ulb(index,100,200,60,30)">
           </div>
-          <div class="testPlanet" v-for="(item,index) in sunSys" v-bind:style="lbTrafo(index, 100,300,20)">
-            {{item.planetId}}
+          <div class="planetAufUmlaufBahn" v-for="(item,index) in sunSys" v-bind:style="lbTrafo(index, 100,200,60,30)">
+            <div class=planetgroup>
+              <div class="planet atmos hgAtmos">
+              </div>
+              <div class="planet gt" style="background-size:500%;" v-bind:style="grundTexturPosition(index)" >
+              </div>
+              <div class="planet gtFarbe" style="mix-blend-mode:overlay;" v-bind:style="gtFarbe(index)">
+              </div>
+              <div class="planet wasser" v-bind:style="wasserZoom(index)+''+wasserPosition(index)">
+              </div>
+              <div class="planet verlauf" v-bind:style="atmosphaereColor(index,true)">
+              </div>
+              <div class="planet atmos" v-bind:style="atmosphaereColor(index,false)">
+              </div>
+              <div class="planet ring" v-bind:style="ring(index)"> 
+              </div>
+            </div> 
+          </div>         
           </div>
         </b-col>
         <b-col cols="1" align-self="center" >
-          <b-btn class=weiter v-on:click="initiator+=1">&rsaquo;</b-btn>
+          <b-btn class=weiter v-on:click="initiator+=1 , sonnensys(initiator)">&rsaquo;</b-btn>
         </b-col>
     </b-row>
     <b-row class="site">
@@ -60,7 +75,7 @@ export default {
       msg: "Hi :>",
       json: json,
       id: 0,
-      initiator: 1,
+      initiator: 0,
       planet:{
         gtPos:{x:0,y:0},
         gtFarbe:{r:0,g:0,b:0},
@@ -76,7 +91,6 @@ export default {
         {planetId:5},
         {planetId:6},
         {planetId:7},
-        {planetId:8}
       ]
     };
   },
@@ -86,23 +100,45 @@ export default {
     }
   },
   methods: {
-    ulb:function(iterator, diffBH, breite, abstand){
-      var h=(breite-diffBH)*2+iterator*abstand; 
-      var b=breite*2+iterator*abstand*3;
-      console.log("height:" + h + "px; width:" + b + "px; border-radius:" + b + "px/" + h + "px;");
-      return "height:" + h + "px; width:" + b + "px; border-radius:" + b + "px/" + h + "px; transform: translateX(-50%) translateY(-50%);";
+   ulb:function(iterator, diffBH, breite, abstandb,abstandh){
+      
+      var b=(breite+iterator*abstandb)*2;
+      var h=(b-diffBH*2)-abstandh*iterator*2;   
+
+      //console.log("Laufbahn("+iterator+") h:"+ h+"  breite:"+b);
+      return " height:" + h + "px; width:" + b + "px; border-radius:" + b + "px/" + h + "px; transform: translateX(-50%) translateY(-50%);";
     },
-    lbTrafo: function(iterator, diffBH, breite, abstand){
-      breite+=iterator*abstand;
-      //diffBH+=iterator*abstand;
-      var grad=((360/this.sunSys.length)*(iterator)).toFixed(0);
-      var sin=breite-(diffBH*(Math.abs(Math.sin(grad* Math.PI / 180.0).toFixed(3)))).toFixed(0);
-      return "transform:translateX(-50%) translateY(-50%) rotate(" + grad + "deg) translate(" + sin + "px) rotate(-" + grad + "deg);";
+    lbTrafo: function(iterator, diffBH, breite, abstandb,abstandh){
+      
+      diffBH=diffBH+abstandh*iterator; 
+      breite=breite+abstandb*iterator;
+      
+      //console.log("Planet("+iterator+") diffBH:"+ diffBH+"("+(breite*2-diffBH*2)+")  breite:"+breite*2);
+
+      var grad=((360/this.sunSys.length)*(iterator));
+      var r=(breite-diffBH*(Math.abs(Math.sin(grad* Math.PI / 180.0))));
+      
+      var scale=1;
+      /*
+      var standardScale=0.5;
+      var scaleFactor=0.5;
+      if(grad<=90){
+        scale=(grad/90)*scaleFactor+standardScale;
+      } if(grad>90){
+        scale=(1-(grad-90)/90)*scaleFactor;
+      } if (grad >180){
+        scale=(((grad-180)/90))*scaleFactor;
+      } if (grad >270){
+        scale=(1-(grad-270)/90)+scaleFactor;
+      }  */
+
+      console.log("Planet("+iterator+") scale: "+scale);
+      return "transform:translateX(-50%) translateY(-50%) rotate(" + grad + "deg) translate(" + r + "px) rotate(-" + grad + "deg) scale("+scale+");";
     },
     wasserZoom: function(childnr) {
       var anz;
       var proz;
-      console.log(childnr);
+      //console.log(childnr);
       anz = json.process.childs[childnr].participants.length;
       switch (anz) {
         case 1:
@@ -121,7 +157,7 @@ export default {
           proz= "background-size:250% 250%;";
           break;
       }
-      console.log(proz);
+      //console.log(proz);
       return proz;
     },
     atmosphaereColor: function(childnr, hg) {
@@ -167,7 +203,7 @@ export default {
     sonnensys: function(initiatornr){
       var nr, str, strl;
       var ini=initiatornr+1;
-      var sonnsys=[];
+      this.sunSys=[];
 
       for(var i=0; i<json.process.childs.length;i++){
         str=json.process.childs[i].initiator;
@@ -176,7 +212,7 @@ export default {
         nr=nr.match(/\d+/g);
         nr=parseInt(nr);
         if(ini==nr){
-          console.log("ju");
+          //console.log("ju");
           this.sunSys.push({planetid:nr});
         }
         //console.log("IID: "+ ini + "child: " +nr);
@@ -281,7 +317,7 @@ export default {
     ring: function(planetid){
       var type= json.process.childs[planetid].transformation.type;
       if(json.process.childs[planetid].transformation.decision == "true" && type == ">"){
-        console.log("ring");
+        //console.log("ring");
         return "visibility: visible";
       } 
     }
@@ -298,7 +334,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.testPlanet{
+.planetAufUmlaufBahn{
     position: absolute;
     border-radius: 50%;
     background-color: chartreuse;
@@ -310,12 +346,12 @@ export default {
 }
 .umlaufBahn{
   border-style: dashed;
-  border-width: 2px;
-  border-color: yellow;
+  border-width: 1px;
+  border-color: rgb(72, 72, 72);
   position: absolute;
   left:50%;
   top:50%;
-  z-index: 10;
+  z-index: -1;
 }
 .sonne{
   top: 50%;
