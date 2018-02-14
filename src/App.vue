@@ -10,9 +10,10 @@
           <b-btn class="weiter zurueck" v-on:click="((initiator==0)? initiator=0 : initiator-=1), sonnensys(initiator);">&lsaquo;</b-btn>
         </b-col>
         <b-col>
-          <div class="sonne text-center my-3">
-            <img src="/src/assets/sonne.png" v-b-tooltip.hover title="I'm a tooltip!">
+          <div class="sonne">
+            <img id="sonnenBild" src="/src/assets/sonne.png">
           </div>
+           <b-tooltip target="sonnenBild">Sonnensystem: {{sonnensysName(initiator)}}</b-tooltip>
           <div class="umlaufBahn" v-for="(item,index) in sunSys" v-bind:style="ulb(index,100,200,60,30)">
           </div>
           <div class="planetAufUmlaufBahn" v-for="(item,index) in sunSys" v-bind:style="lbTrafo(index, 100,200,60,30)">
@@ -118,9 +119,14 @@ export default {
       var grad=((360/this.sunSys.length)*(iterator));
       var r=(breite-diffBH*(Math.abs(Math.sin(grad* Math.PI / 180.0))));
       
-      var scale=(Math.sin(grad* Math.PI / 180.0)+2)/2;
-      
-      console.log("Planet("+iterator+") scale: "+scale);
+      var scale=(Math.sin(grad* Math.PI / 180.0)+2)/3;
+      if (grad>180){
+        scale=scale-iterator*0.01
+      } else {
+        scale=scale+iterator*0.05
+      }
+      scale*=0.3
+      //console.log("Planet("+iterator+") scale: "+scale);
       return "transform:translateX(-50%) translateY(-50%) rotate(" + grad + "deg) translate(" + r + "px) rotate(-" + grad + "deg) scale("+scale+");";
     },
     wasserZoom: function(childnr) {
@@ -190,7 +196,7 @@ export default {
     },
     sonnensys: function(initiatornr){
       var nr, str, strl;
-      var ini=initiatornr+1;
+      var ini=initiatornr;
       this.sunSys=[];
 
       for(var i=0; i<json.process.childs.length;i++){
@@ -200,10 +206,10 @@ export default {
         nr=nr.match(/\d+/g);
         nr=parseInt(nr);
         if(ini==nr){
-          //console.log("ju");
-          this.sunSys.push({planetid:nr});
+          console.log("MATCH(i,ini,nr) "+i+" "+ini+" "+nr);
+          this.sunSys.push({planetid:i});
         }
-        //console.log("IID: "+ ini + "child: " +nr);
+        console.log("i:"+i+" IID: "+ ini + " Planet: " +nr);
       }
     },
     wasserPosition: function(childnr) {
@@ -300,6 +306,7 @@ export default {
         }
       }
       name += initiatornr;
+      return name;
       //console.log(name);
     },
     ring: function(planetid){
@@ -325,9 +332,6 @@ export default {
 .planetAufUmlaufBahn{
     position: absolute;
     border-radius: 50%;
-    background-color: chartreuse;
-    width:50px;
-    height: 50px;
     text-align:center;
     left:50%;
     top:50%;
@@ -339,7 +343,7 @@ export default {
   position: absolute;
   left:50%;
   top:50%;
-  z-index: -1;
+  z-index: -2;
 }
 .sonne{
   top: 50%;
@@ -357,7 +361,7 @@ export default {
   margin: auto;
   width: 170px;
   height: 170px;
-  transform: translateY(-50%);
+  z-index: -1;
 }
 .planet {
   border-radius: 50%;
@@ -367,6 +371,7 @@ export default {
   width: 100%;
   height: 100%;
   background-size: 150px;
+
 }
 .atmos {
   top: -5%;
@@ -377,12 +382,17 @@ export default {
   z-index: 4;
 }
 .ring{
-  top: -25%;
-  left: -25%;
-  width: 150%;
-  height: 150%;
+  width: 100%;
+  height: 100%;
+  top:10%;
+  left:10%;
   z-index: 4;
   visibility: hidden;
+  background-image: url(/src/assets/ring.svg);
+  background-repeat: no-repeat;
+  border-radius: 0;
+  transform: scale(1.7);
+  mix-blend-mode: ;
 }
 .hgAtmos {
   background: radial-gradient(
