@@ -65,6 +65,8 @@
             <img  class="pfeil" src="./assets/pfeil_r.svg">
           </b-btn>
         </a>
+        <a id=randomButton v-on:click="id=json.process.childs.length, addPlanet()"></a>
+        <b-tooltip target="randomButton">Klick mich, um neue Planeten zu generieren</b-tooltip>
         <div class="planetgroup pView">
           <div class="planet atmos hgAtmos">
           </div>
@@ -85,7 +87,7 @@
         </div>
         </b-col>
         <b-col cols="2" align-self="center" >
-          <b-btn class=weiter v-on:click="((id>=43) ? id=43 : id+=1)">
+          <b-btn class=weiter v-on:click="((id>=json.process.childs.length-1) ? id=json.process.childs.length-1 : id+=1)">
             <img  class="pfeil" src="./assets/pfeil_r.svg">
           </b-btn>
         </b-col>
@@ -396,6 +398,97 @@ export default {
       name=name.replace(/[ .]*/g,'');
       return name;
       //console.log(name);
+    },
+    addPlanet: function(){
+    var participants; //length -> wasserzoom https://process.stadt.de/stakeholder/1
+    var initiator; //sonnensystem/ atmosphärenfarbe https://process.stadt.de/stakeholder/3
+    var description=''; // string  "Abwägungs- und Satzungsbeschluss. Der Stadtrat beschliesst die Abwägung und den geänderten Entwurf"
+    var start;//datum (jetzt) 2015-11-03T11:11:00+01:00
+    var name='rdn';//name Satzungsbeschluss
+    var transformation_type; // ring  <,>,=
+    var transformation_decision; // ring true/false
+    var hilfsVar;
+    var id;
+
+    hilfsVar=parseInt(((Math.random()) *  12+ 75));
+    for(var i=0;i<hilfsVar;i++){
+      description+='anna';
+    }
+    
+    hilfsVar=parseInt(((Math.random()) *  4+ 100));
+    name += hilfsVar;
+
+    hilfsVar=parseInt(((Math.random()) *  0+ 4));
+    switch(hilfsVar) {
+    case 0: participants='[]'
+    case 1: participants='["https://process.stadt.de/stakeholder/1"]'; break;
+    case 2: participants='["https://process.stadt.de/stakeholder/1","https://process.stadt.de/stakeholder/2"]'; break;
+    case 3: participants='["https://process.stadt.de/stakeholder/1","https://process.stadt.de/stakeholder/2","https://process.stadt.de/stakeholder/3"]'; break;
+    case 4: participants='["https://process.stadt.de/stakeholder/1","https://process.stadt.de/stakeholder/2","https://process.stadt.de/stakeholder/3","https://process.stadt.de/stakeholder/4"]'; break;
+    }
+    
+
+    hilfsVar=parseInt(((Math.random()) *  18+ 99));
+    initiator="https://process.stadt.de/stakeholder/"+hilfsVar;
+
+    start=new Date().toJSON();
+
+    hilfsVar=parseInt(((Math.random()) * 1 + 3));
+    switch(hilfsVar) {
+    case 1: transformation_type="<"; break;
+    case 2: transformation_type=">";break;
+    case 3: transformation_type="=";break;
+    }
+    hilfsVar=parseInt(((Math.random()) * 0 + 1));
+     switch(hilfsVar) {
+    case 0: transformation_decision="false"; break;
+    case 1: transformation_decision="true" ;break;
+    }2
+    id="https://process.stadt.de/process/1"+json.process.childs.length;
+
+    var randomPlanet = {"id": id,
+          "reference (optional)": "",
+          "initiator": initiator,
+          "connection": {
+            "from": [
+              "https://process.stadt.de/process/141"
+            ],
+            "to": [
+              "https://process.stadt.de/process/143",
+              "https://process.stadt.de/process/144"
+            ]
+          },
+          "parent": "https://process.stadt.de/process/1",
+          "childs": [],
+          "name": name,
+          "description": description,
+          "location": [
+            "https://process.stadt.de/location/1"
+          ],
+          "start": start,
+          "end (optional)": "",
+          "participation": "partial opened",
+          "participants": participants,
+          "transformation": {
+            "type": transformation_type,
+            "info": "",
+            "decision": transformation_decision
+          },
+          "results (optional)": [
+            {
+              "id": "https://process.stadt.de/results/11",
+              "name": "Antrag",
+              "description": "Antrag für NSP Mittel",
+              "copyright (optional)": "",
+              "text (optional)": "",
+              "files (optional)": [],
+              "created": "2011-11-11T11:11:00+01:00",
+              "modified": "2012-11-11T11:11:00+01:00"
+            }
+          ]
+        }
+      json.process.childs.push(randomPlanet);
+      console.log(json.process.childs);
     }
   }
 };
@@ -573,7 +666,7 @@ body {
   cursor: pointer;
 }
 .pView{
-  transform:scale(1.5) translateY(-50%);
+  transform: translateY(-110%) scale(1.5);
 }
 .weiter{
   background-color: #E72C7C !important;
@@ -618,10 +711,22 @@ body {
   text-align: center;
   position: absolute;
   min-width: 500px;
-  padding-top:0.3em;
+  padding-top:0.5em;
   top:80%;
   height: 120px;
   left: 50%;
   transform: translateX(-50%);
 }
+#randomButton{
+  width: 400px;
+  height: 400px;
+  border-radius: 500px;
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translateX(-50%) translateY(-50%);
+  cursor: pointer;
+  z-index: 20;
+}
+
 </style>
