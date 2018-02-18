@@ -535,7 +535,7 @@ export default {
   margin: auto;
   width: 170px;
   height: 170px;
-  z-index: -1;
+  z-index: 1;
 }
 .planet {
   border-radius: 50%;
