@@ -7,13 +7,13 @@
   </header>
     <b-row class="site">
        <b-col cols="1" align-self="center" >
-          <b-btn class="weiter zurueck" v-on:click="((initiator==0)? initiator=0 : initiator-=1);">
+          <b-btn class="weiter zurueck" v-on:click="((initiator==0)? initiator=0 : initiator-=1), sonneFarbeRotation=0;">
             <img  class="pfeil" src="./assets/pfeil_r.svg">
           </b-btn>
         </b-col>
         <b-col>
           <div class="sonne">
-            <img id="sonnenBild" src="/src/assets/sonne.png">
+            <img id="sonnenBild" v-on:click="sonneFarbeRotation+=45;" src="/src/assets/sonne.png" v-bind:style="'filter:hue-rotate('+sonneFarbeRotation+'deg)'">
           </div>
            <b-tooltip target="sonnenBild">Sonnensystem: {{sonnensysName(initiator)}}</b-tooltip>
           <div class="umlaufBahn" v-for="(item,index) in sunSys[initiator]" v-bind:style="ulb(index,100,200,60,30)">
@@ -38,7 +38,7 @@
           </a>
         </b-col>
         <b-col cols="1" align-self="center" >
-          <b-btn class=weiter v-on:click="((initiator>=sunSys.length-1) ? initiator=sunSys.length-1 : initiator+=1);">
+          <b-btn class=weiter v-on:click="((initiator>=sunSys.length-1) ? initiator=sunSys.length-1 : initiator+=1), sonneFarbeRotation=0;">
             <img  class="pfeil" src="./assets/pfeil_r.svg">
           </b-btn>
         </b-col>
@@ -80,6 +80,7 @@ export default {
   name: "app",
   data() {
     return {
+      sonneFarbeRotation:0,
       msg: "Hi :>",
       json: json,
       id: 0,
@@ -511,6 +512,7 @@ body {
   width: 200px;
   height: 200px;
   z-index: 11;
+  cursor: pointer;
 }
 .pView{
   transform:scale(1.5) translateY(-50%);
