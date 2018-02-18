@@ -592,8 +592,10 @@ body {
   height: 35px;
 }
 .runter{
-  transform: rotate(90deg);
+  transform: translateX(-50%) rotate(90deg);
   margin-top:86vh;
+  position: absolute;
+  z-index: 5;
 }
 .hoch{
   transform: translateX(-50%) rotate(-90deg);
@@ -609,17 +611,16 @@ body {
 }
 .plakette{
   background-image: url(/src/assets/schildchen.svg);
-  width: 100%;
-  min-width: 500px;
   background-repeat: no-repeat;
   color:#301C47;
   font-weight:bold;
   font-size: 150%;
   text-align: center;
-  padding:0.5em;
-  margin-top:90%;
-  align-self: center;
-  display: block;
+  position: absolute;
+  width: 100%;
+  min-width: 500px;
+  padding-top:0.7em;
+  top:80%;
   height: 120px;
 }
 </style>
