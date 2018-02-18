@@ -7,45 +7,50 @@
   </header>
     <b-row class="site">
        <b-col cols="1" align-self="center" >
-          <b-btn class="weiter zurueck" v-on:click="((initiator==0)? initiator=0 : initiator-=1), sonnensys(initiator);">&lsaquo;</b-btn>
+          <b-btn class="weiter zurueck" v-on:click="((initiator==0)? initiator=0 : initiator-=1);">
+            <img  class="pfeil" src="./assets/pfeil_r.svg">
+          </b-btn>
         </b-col>
         <b-col>
           <div class="sonne">
             <img id="sonnenBild" src="/src/assets/sonne.png">
           </div>
            <b-tooltip target="sonnenBild">Sonnensystem: {{sonnensysName(initiator)}}</b-tooltip>
-          <div class="umlaufBahn" v-for="(item,index) in sunSys" v-bind:style="ulb(index,100,200,60,30)">
+          <div class="umlaufBahn" v-for="(item,index) in sunSys[initiator]" v-bind:style="ulb(index,100,200,60,30)">
           </div>
-          <div class="planetAufUmlaufBahn" v-for="(item,index) in sunSys" v-bind:style="lbTrafo(index, 100,200,60,30)">
+          <a href=#planetView class="planetAufUmlaufBahn" v-for="(item,index) in sunSys[initiator]" v-bind:style="lbTrafo(index, 100,200,60,30)" v-on:click="id=item">
             <div class=planetgroup>
               <div class="planet atmos hgAtmos">
               </div>
-              <div class="planet gt" style="background-size:500%;" v-bind:style="grundTexturPosition(index)" >
+              <div class="planet gt" style="background-size:500%;" v-bind:style="grundTexturPosition(item)" >
               </div>
-              <div class="planet gtFarbe" style="mix-blend-mode:overlay;" v-bind:style="gtFarbe(index)">
+              <div class="planet gtFarbe" style="mix-blend-mode:overlay;" v-bind:style="gtFarbe(item)">
               </div>
-              <div class="planet wasser" v-bind:style="wasserZoom(index)+''+wasserPosition(index)">
+              <div class="planet wasser" v-bind:style="wasserZoom(item)+''+wasserPosition(item)">
               </div>
-              <div class="planet verlauf" v-bind:style="atmosphaereColor(index,true)">
+              <div class="planet verlauf" v-bind:style="atmosphaereColor(item,true)">
               </div>
-              <div class="planet atmos" v-bind:style="atmosphaereColor(index,false)">
+              <div class="planet atmos" v-bind:style="atmosphaereColor(item,false)">
               </div>
-              <div class="planet ring" v-bind:style="ring(index)"> 
+              <div class="planet ring" v-bind:style="ring(item)"> 
               </div>
-            </div> 
-          </div>         
-          </div>
+            </div>        
+          </a>
         </b-col>
         <b-col cols="1" align-self="center" >
-          <b-btn class=weiter v-on:click="((initiator>=15) ? initiator=15 : initiator+=1), sonnensys(initiator)">&rsaquo;</b-btn>
+          <b-btn class=weiter v-on:click="((initiator>=sunSys.length-1) ? initiator=sunSys.length-1 : initiator+=1);">
+            <img  class="pfeil" src="./assets/pfeil_r.svg">
+          </b-btn>
         </b-col>
     </b-row>
-    <b-row class="site">
+    <b-row id="planetView" class="site">
         <b-col align-self="center" >
-           <b-btn class="weiter zurueck" v-on:click="((id==0) ? id=0 : id-=1)">&lsaquo;</b-btn>
+           <b-btn class="weiter zurueck" v-on:click="((id==0) ? id=0 : id-=1)">
+             <img  class="pfeil" src="./assets/pfeil_r.svg">
+           </b-btn>
         </b-col>
         <b-col>
-        <div class=planetgroup>
+        <div class="planetgroup pView">
           <div class="planet atmos hgAtmos">
           </div>
           <div class="planet gt" style="background-size:500%;" v-bind:style="grundTexturPosition(id)" >
@@ -62,7 +67,9 @@
         </div>
         </b-col>
         <b-col align-self="center" >
-          <b-btn class=weiter v-on:click="((id>=43) ? id=43 : id+=1)">&rsaquo;</b-btn>
+          <b-btn class=weiter v-on:click="((id>=43) ? id=43 : id+=1)">
+            <img  class="pfeil" src="./assets/pfeil_r.svg">
+          </b-btn>
         </b-col>
     </b-row>
 </b-container>
@@ -84,21 +91,55 @@ export default {
         atmoFarbe:{r:0,g:0,b:0,a:0},
         csStyle:''
       }, 
-      sunSys:[
-        {planetId:1},
-        {planetId:2},
-        {planetId:3},
-        {planetId:4},
-        {planetId:5},
-        {planetId:6},
-        {planetId:7},
-      ]
+      sunSys:[]
     };
   },
-  watch:{
-    planet: function(){
-      console.log("hi")
-    }
+  beforeMount:function(){
+        var maxAnzPlaneten=7;
+        var AusgelagertePlaneten=0;
+        var AusgelagerteSonnenSysNr=0;
+        var AusgelagerteSonnenSys=[];
+        AusgelagerteSonnenSys[0]=[];  
+        var strrr;
+        var nr, str, strl;
+        for (var j=0; j<json.process.stakeholder.length;j++){
+          this.sunSys[j]=[];
+          var match=0;
+          for(var i=0; i<json.process.childs.length;i++){
+            str=json.process.childs[i].initiator;
+            strl=str.length;
+            nr=str.substr(strl-2,strl);
+            nr=nr.match(/\d+/g);
+            nr=parseInt(nr);
+            if(j==nr){
+            //console.log("MATCH(i,j,nr) "+i+" "+j+" "+nr);   
+            if (match>maxAnzPlaneten){ 
+              if(AusgelagertePlaneten>maxAnzPlaneten){
+                AusgelagertePlaneten=0;
+                AusgelagerteSonnenSysNr++;
+                AusgelagerteSonnenSys[AusgelagerteSonnenSysNr]=[];
+              }
+              AusgelagerteSonnenSys[AusgelagerteSonnenSysNr][AusgelagertePlaneten]=i;
+              AusgelagertePlaneten++;
+            }
+            else  {  
+              //console.log("i:"+i+" IID(j): "+ j + " PlanetIID: " +nr);          
+              this.sunSys[j][match]=i;
+              match++;        
+            }
+            }
+          }
+        }
+
+        //sortiere und lösche
+        this.sunSys.sort();
+        while (this.sunSys[0][0]==null){
+          this.sunSys.shift();
+        }
+        //console.log(sunSys);
+        //console.log(AusgelagerteSonnenSys);
+        this.sunSys=this.sunSys.concat(AusgelagerteSonnenSys);
+        //console.log(sunSys);
   },
   methods: {
    ulb:function(iterator, diffBH, breite, abstandb,abstandh){
@@ -116,7 +157,7 @@ export default {
       
       //console.log("Planet("+iterator+") diffBH:"+ diffBH+"("+(breite*2-diffBH*2)+")  breite:"+breite*2);
 
-      var grad=((360/this.sunSys.length)*(iterator));
+      var grad=((360/this.sunSys[this.initiator].length)*(iterator));
       var r=(breite-diffBH*(Math.abs(Math.sin(grad* Math.PI / 180.0))));
       
       var scale=(Math.sin(grad* Math.PI / 180.0)+2)/3;
@@ -194,24 +235,6 @@ export default {
         return rgba;
       }
     },
-    sonnensys: function(initiatornr){
-      var nr, str, strl;
-      var ini=initiatornr;
-      this.sunSys=[];
-
-      for(var i=0; i<json.process.childs.length;i++){
-        str=json.process.childs[i].initiator;
-        strl=str.length;
-        nr=str.substr(strl-2,strl);
-        nr=nr.match(/\d+/g);
-        nr=parseInt(nr);
-        if(ini==nr){
-          console.log("MATCH(i,ini,nr) "+i+" "+ini+" "+nr);
-          this.sunSys.push({planetid:i});
-        }
-        console.log("i:"+i+" IID: "+ ini + " Planet: " +nr);
-      }
-    },
     wasserPosition: function(childnr) {
       var count = 0;
       var proz1 = 0;
@@ -240,10 +263,9 @@ export default {
         count += str.charCodeAt(i);
         //console.log(count);
       }
-      proz1 = count % 100;
-      //console.log(proz1);
-      proz2 = (proz1 % 51) * 2;
-      //console.log(proz2);
+      proz1 = count*count*count % 100;
+      proz2 = (count*count % 51) * 2;
+      //console.log("x: "+proz1+"% y:"+proz2+"%");
       texturpos = "background-position: " + proz1 + "% " + proz2 + "%;";
 
       return texturpos;
@@ -283,9 +305,9 @@ export default {
         "background-color:rgb(" + count1 + "," + count2 + "," + count3 + ");";
       return rgb;
     },
-    sonnensysName: function(initiatornr) {
+    sonnensysName: function(childNr) {
       var name;
-      var sth = json.process.stakeholder[initiatornr].name;
+      var sth = json.process.childs[childNr].name;
       name = sth[0] + "-";
 
       if (sth.length == 4) {
@@ -305,7 +327,7 @@ export default {
           }
         }
       }
-      name += initiatornr;
+      name += childNr;
       return name;
       //console.log(name);
     },
@@ -352,7 +374,6 @@ export default {
   margin: auto;
   display: box;
   text-align:center;
-  z-index: 11;
 }
 .planetgroup {
   margin-top: 10% !important;
@@ -371,7 +392,6 @@ export default {
   width: 100%;
   height: 100%;
   background-size: 150px;
-
 }
 .atmos {
   top: -5%;
@@ -392,7 +412,6 @@ export default {
   background-repeat: no-repeat;
   border-radius: 0;
   transform: scale(1.7);
-  mix-blend-mode: ;
 }
 .hgAtmos {
   background: radial-gradient(
@@ -479,7 +498,7 @@ header {
 
 .zurueck {
   margin-left: 100%;
-  transform: translateX(-100%);
+  transform: translateX(-100%) rotate(180deg);
 }
 body {
   overflow-x: hidden;
@@ -487,5 +506,29 @@ body {
 }
 .site{
   height: 100vh;
+}
+#sonnenBild{
+  width: 200px;
+  height: 200px;
+  z-index: 11;
+}
+.pView{
+  transform:scale(1.5) translateY(-50%);
+}
+.weiter{
+  background-color: #E72C7C !important;
+  border-color: rgba(0,0,0,0.6) !important;
+  border-width: 3px !important;
+  opacity: 0.5;
+}
+.weiter:hover{
+  opacity: 1;
+}
+.weiter:visited{
+  opacity: 0.5;
+}
+.pfeil{
+  width: 25px;
+  height: 35px;
 }
 </style>
