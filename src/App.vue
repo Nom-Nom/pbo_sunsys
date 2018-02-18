@@ -338,6 +338,40 @@ export default {
         //console.log("ring");
         return "visibility: visible";
       } 
+    },
+    foundPlanet: function(planetid){
+      var found=json.process.childs[planetid].start;
+      var foundy=found.substr(0,4);
+      var foundm=found.substr(5,2);
+      var foundd=found.substr(8,2);
+      found=foundd+"."+foundm+"."+foundy;
+      return found;
+    },
+    planetName: function(childNr) {
+      var name;
+      var sth = json.process.childs[childNr].name;
+      name = sth[0]+ sth[2]+sth[1]+"-";
+
+      if (sth.length == 4) {
+        name += sth[3] + sth[2];
+      } else if (sth.length <= 7) {
+        for (var i = sth.length; i >0; i--) {
+          if (i == 3 || i == 5 || i == sth.length - 1) {
+            if (sth[i] == "(" || sth[i] == ")") name += "-";
+            else name += sth[i];
+          }
+        }
+      } else if (sth.length > 7) {
+        for (var i = sth.length; i >0; i--) {
+          if (i == 3 || i == 5 || i == 7 || i == sth.length - 1) {
+            if (sth[i] == "(" || sth[i] == ")") name += "-";
+            else name += sth[i];
+          }
+        }
+      }
+      name += childNr;
+      return name;
+      //console.log(name);
     }
   }
 };
