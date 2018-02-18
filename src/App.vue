@@ -4,8 +4,13 @@
     <img class="openerPlanets" src="./assets/openerPlanets.png">
     <img class="openerSchrift" src="./assets/openerSchrift.png">
     <span class="author">von Hannes Liehr und Anna Krauß</span>
+    <a  href=#sunSysView>
+    <b-btn class="weiter runter">
+      <img  class="pfeil" src="./assets/pfeil_r.svg">
+    </b-btn>
+    </a>
   </header>
-    <b-row class="site">
+    <b-row id=sunSysView class="site">
        <b-col cols="1" align-self="center" >
           <b-btn class="weiter zurueck" v-on:click="((initiator==0)? initiator=0 : initiator-=1), sonneFarbeRotation=0;">
             <img  class="pfeil" src="./assets/pfeil_r.svg">
@@ -13,7 +18,7 @@
         </b-col>
         <b-col>
           <div class="sonne">
-            <img id="sonnenBild" v-on:click="sonneFarbeRotation+=45;" src="/src/assets/sonne.png" v-bind:style="'filter:hue-rotate('+sonneFarbeRotation+'deg)'">
+            <img id="sonnenBild" v-on:click="sonneFarbeRotation+=45;" src="/src/assets/sonne.png" v-bind:style="sonneFarbe()">
           </div>
            <b-tooltip target="sonnenBild">Sonnensystem: {{sonnensysName(initiator)}}</b-tooltip>
           <div class="umlaufBahn" v-for="(item,index) in sunSys[initiator]" v-bind:style="ulb(index,100,200,60,30)">
@@ -36,6 +41,11 @@
               </div>
             </div>        
           </a>
+          <a  href=#planetView>
+            <b-btn class="weiter runterSunSys">
+              <img  class="pfeil" src="./assets/pfeil_r.svg">
+            </b-btn>
+          </a>
         </b-col>
         <b-col cols="1" align-self="center" >
           <b-btn class=weiter v-on:click="((initiator>=sunSys.length-1) ? initiator=sunSys.length-1 : initiator+=1), sonneFarbeRotation=0;">
@@ -50,6 +60,11 @@
            </b-btn>
         </b-col>
         <b-col>
+        <a  href=#sunSysView>
+          <b-btn class="weiter hoch">
+            <img  class="pfeil" src="./assets/pfeil_r.svg">
+          </b-btn>
+        </a>
         <div class="planetgroup pView">
           <div class="planet atmos hgAtmos">
           </div>
@@ -64,6 +79,9 @@
           <div class="planet atmos" v-bind:style="atmosphaereColor(id,false)">
           </div>
           <div class="planet ring" v-bind:style="ring(id)"> </div>
+        </div>
+        <div class="plakette">
+          Name: {{planetName(id)}} <br> Entdeckt am: {{foundPlanet(id)}}
         </div>
         </b-col>
         <b-col align-self="center" >
@@ -143,7 +161,11 @@ export default {
         //console.log(sunSys);
   },
   methods: {
-   ulb:function(iterator, diffBH, breite, abstandb,abstandh){
+    sonneFarbe:function(){
+      var str = this.sonneFarbeRotation+(this.initiator*22.5);
+      return "filter:hue-rotate("+ str +"deg);";
+    },
+    ulb:function(iterator, diffBH, breite, abstandb,abstandh){
       
       var b=(breite+iterator*abstandb)*2;
       var h=(b-diffBH*2)-abstandh*iterator*2;   
@@ -153,6 +175,7 @@ export default {
     },
     lbTrafo: function(iterator, diffBH, breite, abstandb,abstandh){
       
+
       diffBH=diffBH+abstandh*iterator; 
       breite=breite+abstandb*iterator;
       
@@ -370,6 +393,7 @@ export default {
         }
       }
       name += childNr;
+      name=name.replace(/[ .]*/g,'');
       return name;
       //console.log(name);
     }
@@ -566,5 +590,36 @@ body {
 .pfeil{
   width: 25px;
   height: 35px;
+}
+.runter{
+  transform: rotate(90deg);
+  margin-top:86vh;
+}
+.hoch{
+  transform: translateX(-50%) rotate(-90deg);
+  margin-top:10%;
+  position: absolute;
+  left:50%;
+}
+.runterSunSys{
+  transform: translateX(-50%)  rotate(90deg) ;
+  left:50%;
+  position:absolute;
+  top:90%;
+}
+.plakette{
+  background-image: url(/src/assets/schildchen.svg);
+  width: 100%;
+  min-width: 500px;
+  background-repeat: no-repeat;
+  color:#301C47;
+  font-weight:bold;
+  font-size: 150%;
+  text-align: center;
+  padding:0.5em;
+  margin-top:90%;
+  align-self: center;
+  display: block;
+  height: 120px;
 }
 </style>
