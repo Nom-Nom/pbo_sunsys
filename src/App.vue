@@ -402,9 +402,9 @@ export default {
     addPlanet: function(){
     var participants; //length -> wasserzoom https://process.stadt.de/stakeholder/1
     var initiator; //sonnensystem/ atmosphärenfarbe https://process.stadt.de/stakeholder/3
-    var description=''; // string  "Abwägungs- und Satzungsbeschluss. Der Stadtrat beschliesst die Abwägung und den geänderten Entwurf"
+    var description=""; // string  "Abwägungs- und Satzungsbeschluss. Der Stadtrat beschliesst die Abwägung und den geänderten Entwurf"
     var start;//datum (jetzt) 2015-11-03T11:11:00+01:00
-    var name='rdn';//name Satzungsbeschluss
+    var name="rdn";//name Satzungsbeschluss
     var transformation_type; // ring  <,>,=
     var transformation_decision; // ring true/false
     var hilfsVar;
@@ -415,7 +415,7 @@ export default {
       description+='anna';
     }
     
-    hilfsVar=parseInt(((Math.random()) *  4+ 100));
+    hilfsVar=((Math.random()) *  4+ 100));
     name += hilfsVar;
 
     hilfsVar=parseInt(((Math.random()) *  0+ 4));
@@ -433,17 +433,18 @@ export default {
 
     start=new Date().toJSON();
 
-    hilfsVar=parseInt(((Math.random()) * 1 + 3));
+    hilfsVar=parseInt(((Math.random()) * 3) + 1);
     switch(hilfsVar) {
     case 1: transformation_type="<"; break;
     case 2: transformation_type=">";break;
     case 3: transformation_type="=";break;
     }
-    hilfsVar=parseInt(((Math.random()) * 0 + 1));
+    hilfsVar=parseInt(((Math.random()) * 2) + 1);
      switch(hilfsVar) {
-    case 0: transformation_decision="false"; break;
-    case 1: transformation_decision="true" ;break;
-    }2
+    case 1: transformation_decision="false"; break;
+    case 2: transformation_decision="true" ;break;
+    }
+    //console.log(transformation_type)
     id="https://process.stadt.de/process/1"+json.process.childs.length;
 
     var randomPlanet = {"id": id,
@@ -488,7 +489,7 @@ export default {
           ]
         }
       json.process.childs.push(randomPlanet);
-      console.log(json.process.childs);
+      console.log(json.process.childs[this.id].name);
     }
   }
 };
@@ -728,5 +729,14 @@ body {
   cursor: pointer;
   z-index: 20;
 }
-
+#sunSysView{
+  background-image: url(/src/assets/sterne.svg);
+  background-repeat: repeat;
+  background-size: 500px;
+}
+#planetView{
+  background-image: url(/src/assets/sterne.svg);
+  background-repeat: repeat;
+  background-size: 900px;
+}
 </style>
