@@ -53,8 +53,8 @@
           </b-btn>
         </b-col>
     </b-row>
-    <b-row id="planetView" class="site">
-        <b-col align-self="center" >
+    <b-row  id="planetView" class="site">
+        <b-col cols="2" align-self="center" >
            <b-btn class="weiter zurueck" v-on:click="((id==0) ? id=0 : id-=1)">
              <img  class="pfeil" src="./assets/pfeil_r.svg">
            </b-btn>
@@ -84,7 +84,7 @@
           Name: {{planetName(id)}} <br> Entdeckt am: {{foundPlanet(id)}}
         </div>
         </b-col>
-        <b-col align-self="center" >
+        <b-col cols="2" align-self="center" >
           <b-btn class=weiter v-on:click="((id>=43) ? id=43 : id+=1)">
             <img  class="pfeil" src="./assets/pfeil_r.svg">
           </b-btn>
@@ -533,7 +533,7 @@ header {
   margin-right: auto;
   left: 0;
   right: 0;
-  max-height: 100vh;
+  max-height: 780px;
   max-width: 760px;
   z-index: 2;
 }
@@ -617,10 +617,11 @@ body {
   font-size: 150%;
   text-align: center;
   position: absolute;
-  width: 100%;
   min-width: 500px;
-  padding-top:0.7em;
+  padding-top:0.3em;
   top:80%;
   height: 120px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>
