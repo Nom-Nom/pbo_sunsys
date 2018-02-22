@@ -4,7 +4,7 @@
     <img class="openerPlanets" src="./assets/openerPlanets.png">
     <img class="openerSchrift" src="./assets/openerSchrift.png">
     <span class="author">von Hannes Liehr und Anna Krauß</span>
-    <a  href=#sunSysView>
+    <a  href=# v-scroll-to="'#sunSysView'">
     <b-btn class="weiter runter">
       <img  class="pfeil" src="./assets/pfeil_r.svg">
     </b-btn>
@@ -23,7 +23,7 @@
            <b-tooltip target="sonnenBild">Sonnensystem: {{sonnensysName(initiator)}}</b-tooltip>
           <div class="umlaufBahn" v-for="(item,index) in sunSys[initiator]" v-bind:style="ulb(index,100,200,60,30)">
           </div>
-          <a href=#planetView class="planetAufUmlaufBahn" v-for="(item,index) in sunSys[initiator]" v-bind:style="lbTrafo(index, 100,200,60,30)" v-on:click="id=item">
+          <a href=# v-scroll-to="'#planetView'" class="planetAufUmlaufBahn" v-for="(item,index) in sunSys[initiator]" v-bind:style="lbTrafo(index, 100,200,60,30)" v-on:click="id=item">
             <div class=planetgroup>
               <div class="planet atmos hgAtmos">
               </div>
@@ -41,7 +41,7 @@
               </div>
             </div>        
           </a>
-          <a  href=#planetView>
+          <a  href=# v-scroll-to="'#planetView'">
             <b-btn class="weiter runterSunSys">
               <img  class="pfeil" src="./assets/pfeil_r.svg">
             </b-btn>
@@ -60,7 +60,7 @@
            </b-btn>
         </b-col>
         <b-col>
-        <a  href=#sunSysView>
+        <a  href=# v-scroll-to="'#sunSysView'">
           <b-btn class="weiter hoch">
             <img  class="pfeil" src="./assets/pfeil_r.svg">
           </b-btn>
